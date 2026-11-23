@@ -8,6 +8,4 @@ __pycache__/
 uploads/
 *.csv
 *.log
-sentinelxai_model.pkl
-sentinelxai_rf.pkl
 templates.zip
