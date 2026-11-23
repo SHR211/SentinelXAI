@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelXAI | Cyber Risk Intelligence Platform</title>
+
+<style>
+:root {
+    --bg: #060b13;
+    --panel: #0d1725;
+    --border: #203247;
+    --cyan: #25d4f4;
+    --text: #edf5ff;
+    --muted: #93a7bb;
+    --green: #31d6a0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+nav {
+    min-height: 74px;
+    padding: 15px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: #08111c;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    color: var(--cyan);
+}
+
+.logo span {
+    color: #ffffff;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-links a:hover {
+    color: var(--cyan);
+}
+
+.nav-links .nav-action {
+    background: #123448;
+    border: 1px solid #24617a;
+    padding: 10px 16px;
+    border-radius: 7px;
+    color: var(--cyan);
+}
+
+main {
+    max-width: 1360px;
+    margin: auto;
+    padding: 85px 7% 55px;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 55px;
+    align-items: center;
+}
+
+.eyebrow {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-bottom: 23px;
+}
+
+.eyebrow::before {
+    content: "●";
+    margin-right: 9px;
+}
+
+h1 {
+    font-size: clamp(38px, 4.8vw, 66px);
+    line-height: 1.12;
+    letter-spacing: -1.5px;
+    margin-bottom: 25px;
+}
+
+h1 span {
+    color: var(--cyan);
+}
+
+.description {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 610px;
+}
+
+.actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 34px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 23px;
+    background: var(--cyan);
+    border-radius: 8px;
+    color: #03111b;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: #6ce7ff;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #d6e8f5;
+    border: 1px solid #34516a;
+}
+
+.btn-outline:hover {
+    background: #122538;
+}
+
+.platform {
+    background: linear-gradient(150deg, #111f31, #09121e);
+    border: 1px solid #294258;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(0,0,0,.3);
+}
+
+.platform-header {
+    padding: 18px 21px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.platform-header strong {
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+
+.demo-tag {
+    font-size: 10px;
+    color: #f6ca73;
+    background: #32291b;
+    padding: 6px 9px;
+    border-radius: 5px;
+}
+
+.platform-body {
+    padding: 24px;
+}
+
+.section-label {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pipeline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 15px;
+    background: #0d1c2b;
+    border: 1px solid #22394e;
+    border-radius: 8px;
+    gap: 12px;
+}
+
+.pipeline-item span {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.pipeline-item small {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.pipeline-item.highlight {
+    border-color: #247e99;
+    background: #102d3d;
+}
+
+.pipeline-item.highlight span {
+    color: var(--cyan);
+}
+
+.pipeline-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 17px;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.features-section {
+    margin-top: 95px;
+}
+
+.section-heading {
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.feature {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 27px;
+}
+
+.feature-icon {
+    width: 42px;
+    height: 42px;
+    background: #10364a;
+    border: 1px solid #23657b;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan);
+    font-size: 21px;
+    margin-bottom: 20px;
+}
+
+.feature h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.feature p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.workflow {
+    margin-top: 45px;
+    background: #0b1724;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.workflow h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.workflow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.workflow-step {
+    background: #112537;
+    border: 1px solid #25445b;
+    padding: 12px 15px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #c9e4f3;
+}
+
+.arrow {
+    color: var(--cyan);
+}
+
+footer {
+    margin-top: 70px;
+    padding: 24px 7%;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media(max-width: 950px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding-top: 50px;
+    }
+}
+
+@media(max-width: 600px) {
+    nav {
+        padding: 15px 5%;
+        flex-wrap: wrap;
+    }
+
+    .nav-links {
+        gap: 15px;
+    }
+
+    main {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .arrow {
+        display: none;
+    }
+
+    footer {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">Sentinel<span>XAI</span></div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Overview</a>
+        <a href="{{ url_for('analyze') }}">Security Analysis</a>
+        <a href="{{ url_for('analyze') }}" class="nav-action">
+            Launch Analysis
+        </a>
+    </div>
+</nav>
+
+<main>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            EXPLAINABLE CYBER RISK INTELLIGENCE
+        </div>
+
+        <h1>
+            Intelligent Threat
+            Assessment.
+            <span>Explainable Decisions.</span>
+        </h1>
+
+        <p class="description">
+            SentinelXAI transforms network traffic data into
+            actionable cybersecurity intelligence using
+            Random Forest, XGBoost and Logistic Regression.
+            Weighted ensemble risk scoring and SHAP-based
+            explanations help analysts understand suspicious
+            network activity.
+        </p>
+
+        <div class="actions">
+            <a href="{{ url_for('analyze') }}" class="btn">
+                LAUNCH SECURITY ANALYSIS &rarr;
+            </a>
+
+            <a href="#capabilities" class="btn btn-outline">
+                EXPLORE CAPABILITIES
+            </a>
+        </div>
+
+    </div>
+
+    <div class="platform">
+
+        <div class="platform-header">
+            <strong>SECURITY ANALYTICS ENGINE</strong>
+            <span class="demo-tag">SYSTEM OVERVIEW</span>
+        </div>
+
+        <div class="platform-body">
+
+            <div class="section-label">
+                Assessment Pipeline
+            </div>
+
+            <div class="pipeline">
+
+                <div class="pipeline-item">
+                    <span>Network Traffic Input</span>
+                    <small>CSV / UNSW-NB15</small>
+                </div>
+
+                <div class="pipeline-item">
+                    <span>Data Processing</span>
+                    <small>Feature Preparation</small>
+                </div>
+
+                <div class="pipeline-item">
+                    <span>Machine Learning</span>
+                    <small>RF + XGBoost + LR</small>
+                </div>
+
+                <div class="pipeline-item highlight">
+                    <span>Ensemble Risk Assessment</span>
+                    <small>40% / 40% / 20%</small>
+                </div>
+
+                <div class="pipeline-item">
+                    <span>Explainable AI</span>
+                    <small>SHAP Analysis</small>
+                </div>
+
+                <div class="pipeline-item">
+                    <span>Security Investigation</span>
+                    <small>Event-Level Review</small>
+                </div>
+
+            </div>
+
+            <div class="pipeline-footer">
+                Dataset-based security assessment platform.
+                Results are generated after processing uploaded
+                network traffic records.
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<section class="features-section" id="capabilities">
+
+    <div class="section-heading">
+        <h2>Security Intelligence Capabilities</h2>
+        <p>
+            Integrated machine learning, risk assessment
+            and explainable security analysis.
+        </p>
+    </div>
+
+    <div class="features">
+
+        <div class="feature">
+            <div class="feature-icon">◈</div>
+            <h3>Multi-Model Threat Detection</h3>
+            <p>
+                Random Forest, XGBoost and Logistic Regression
+                analyze network records to estimate attack
+                probabilities from different model perspectives.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">◉</div>
+            <h3>Cyber Risk Intelligence</h3>
+            <p>
+                A weighted ensemble combines the three model
+                outputs into a final cyber-risk score with
+                Low, Medium, High and Critical severity levels.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">⌁</div>
+            <h3>Explainable Investigation</h3>
+            <p>
+                SHAP identifies network features influencing
+                the Random Forest prediction and supports
+                investigation of selected security events.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="workflow">
+
+    <h3>Cyber Risk Assessment Workflow</h3>
+
+    <div class="workflow-steps">
+
+        <div class="workflow-step">Network Data</div>
+        <span class="arrow">&rarr;</span>
+
+        <div class="workflow-step">ML Assessment</div>
+        <span class="arrow">&rarr;</span>
+
+        <div class="workflow-step">Ensemble Risk</div>
+        <span class="arrow">&rarr;</span>
+
+        <div class="workflow-step">SHAP Explanation</div>
+        <span class="arrow">&rarr;</span>
+
+        <div class="workflow-step">Event Investigation</div>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    <span>SentinelXAI | Explainable AI for Intelligent Cyber Risk Assessment</span>
+    <span>UNSW-NB15 • Machine Learning • Explainable AI</span>
+</footer>
+
+</body>
+</html>

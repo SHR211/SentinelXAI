@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SentinelXAI | Cybersecurity Intelligence Platform</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: #040a12;
+            color: #e8f1f8;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* NAVIGATION */
+
+        nav {
+            height: 70px;
+            padding: 0 5%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(4,10,18,.96);
+            border-bottom: 1px solid #142537;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+
+            border: 1px solid #00d9ff;
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #00d9ff;
+            font-size: 11px;
+            font-weight: bold;
+
+            box-shadow: 0 0 15px rgba(0,217,255,.12);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .logo span {
+            color: #00d9ff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: #718398;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .nav-links a:hover {
+            color: #00d9ff;
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #36d399;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+
+            background: #36d399;
+            box-shadow: 0 0 9px #36d399;
+        }
+
+
+        /* HERO */
+
+        .hero {
+            min-height: 650px;
+
+            padding: 75px 5%;
+
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            align-items: center;
+            gap: 70px;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            background: rgba(0,217,255,.045);
+
+            border-radius: 50%;
+
+            filter: blur(80px);
+
+            right: 5%;
+            top: 10%;
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 8px 12px;
+
+            border: 1px solid #164057;
+            border-radius: 5px;
+
+            color: #00d9ff;
+
+            background: rgba(0,217,255,.045);
+
+            font-size: 10px;
+            letter-spacing: 1.4px;
+
+            margin-bottom: 25px;
+        }
+
+        .eyebrow-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #00d9ff;
+            box-shadow: 0 0 8px #00d9ff;
+        }
+
+        h1 {
+            margin: 0;
+
+            font-size: clamp(44px, 5vw, 68px);
+            line-height: 1.02;
+
+            letter-spacing: -2px;
+        }
+
+        h1 span {
+            color: #00d9ff;
+        }
+
+        .hero-description {
+            margin-top: 25px;
+
+            max-width: 650px;
+
+            color: #718398;
+
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+
+        /* ACTIONS */
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 13px 19px;
+
+            background: #00d9ff;
+            color: #031019;
+
+            text-decoration: none;
+
+            border-radius: 6px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            transition: .2s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,217,255,.18);
+        }
+
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 13px 19px;
+
+            border: 1px solid #20384d;
+            border-radius: 6px;
+
+            color: #9aabbc;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition: .2s;
+        }
+
+        .secondary-btn:hover {
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+
+
+        /* MINI FEATURES */
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 45px;
+        }
+
+        .feature {
+            background: #07111c;
+            border: 1px solid #14283a;
+
+            border-radius: 7px;
+
+            padding: 15px;
+        }
+
+        .feature-number {
+            color: #00d9ff;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .feature-title {
+            margin-top: 8px;
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .feature-text {
+            margin-top: 5px;
+
+            color: #5f7184;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+
+        /* SECURITY VISUAL */
+
+        .visual {
+            position: relative;
+
+            height: 450px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar {
+            width: 350px;
+            height: 350px;
+
+            border-radius: 50%;
+
+            border: 1px solid #164057;
+
+            position: relative;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(0,217,255,.06) 0%,
+                    rgba(0,217,255,.02) 45%,
+                    transparent 70%
+                );
+
+            box-shadow:
+                0 0 50px rgba(0,217,255,.08),
+                inset 0 0 50px rgba(0,217,255,.05);
+        }
+
+        .radar::before,
+        .radar::after {
+            content: "";
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            border: 1px solid #13364a;
+        }
+
+        .radar::before {
+            inset: 50px;
+        }
+
+        .radar::after {
+            inset: 105px;
+        }
+
+        .cross-x {
+            position: absolute;
+
+            width: 100%;
+            height: 1px;
+
+            background: #13364a;
+
+            top: 50%;
+        }
+
+        .cross-y {
+            position: absolute;
+
+            width: 1px;
+            height: 100%;
+
+            background: #13364a;
+
+            left: 50%;
+        }
+
+        .radar-scan {
+            position: absolute;
+
+            width: 50%;
+            height: 2px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #00d9ff
+            );
+
+            left: 50%;
+            top: 50%;
+
+            transform-origin: left center;
+
+            animation: radar 4s linear infinite;
+
+            box-shadow: 0 0 12px #00d9ff;
+        }
+
+        @keyframes radar {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        .radar-center {
+            position: absolute;
+
+            width: 105px;
+            height: 105px;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background: #071522;
+
+            border: 1px solid #00aeca;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            box-shadow: 0 0 25px rgba(0,217,255,.12);
+        }
+
+        .radar-center strong {
+            color: #00d9ff;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .radar-center span {
+            margin-top: 5px;
+
+            color: #5f7184;
+
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+
+
+        /* RADAR EVENTS */
+
+        .radar-event {
+            position: absolute;
+
+            padding: 8px 10px;
+
+            background: #081522;
+
+            border: 1px solid #1b384d;
+
+            border-radius: 5px;
+
+            font-size: 9px;
+
+            color: #8fa2b5;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,.25);
+        }
+
+        .event-1 {
+            top: 35px;
+            right: -15px;
+        }
+
+        .event-2 {
+            bottom: 70px;
+            left: -35px;
+        }
+
+        .event-3 {
+            bottom: 10px;
+            right: 20px;
+        }
+
+        .event-dot {
+            display: inline-block;
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            margin-right: 5px;
+
+            background: #ff6262;
+        }
+
+        .event-dot.green {
+            background: #36d399;
+        }
+
+        .event-dot.yellow {
+            background: #f5c451;
+        }
+
+
+        /* PLATFORM SECTION */
+
+        .platform {
+            padding: 30px 5% 70px;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
+        }
+
+        .section-label {
+            color: #00d9ff;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .section-heading h2 {
+            margin: 8px 0 5px;
+
+            font-size: 23px;
+            font-weight: 600;
+        }
+
+        .section-heading p {
+            margin: 0;
+
+            color: #5f7184;
+            font-size: 12px;
+        }
+
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 10px;
+        }
+
+        .architecture-card {
+            min-height: 130px;
+
+            padding: 18px;
+
+            background: #07111c;
+
+            border: 1px solid #14283a;
+            border-radius: 8px;
+
+            position: relative;
+        }
+
+        .architecture-card::after {
+            content: "→";
+
+            position: absolute;
+
+            right: -18px;
+            top: 50%;
+
+            color: #24506a;
+
+            font-size: 17px;
+
+            transform: translateY(-50%);
+        }
+
+        .architecture-card:last-child::after {
+            display: none;
+        }
+
+        .architecture-number {
+            color: #00d9ff;
+
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .architecture-title {
+            margin-top: 14px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .architecture-text {
+            margin-top: 7px;
+
+            color: #5f7184;
+
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+
+        /* FOOTER */
+
+        footer {
+            padding: 20px 5%;
+
+            border-top: 1px solid #142537;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #4f6173;
+
+            font-size: 10px;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1000px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                margin: auto;
+            }
+
+            .actions {
+                justify-content: center;
+            }
+
+            .features {
+                text-align: left;
+            }
+
+            .visual {
+                height: 400px;
+            }
+
+            .architecture {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .architecture-card::after {
+                display: none;
+            }
+
+        }
+
+
+        @media(max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 55px 6%;
+            }
+
+            h1 {
+                font-size: 43px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .radar {
+                width: 280px;
+                height: 280px;
+            }
+
+            .architecture {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 7px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            SX
+        </div>
+
+        <div class="logo">
+            Sentinel<span>XAI</span>
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('analyze') }}">
+            Security Analysis
+        </a>
+
+        <a href="{{ url_for('monitoring') }}">
+            Monitoring
+        </a>
+
+        <div class="nav-status">
+
+            <span class="status-dot"></span>
+
+            AI ENGINE ONLINE
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+
+    <div class="hero-content">
+
+
+        <div class="eyebrow">
+
+            <span class="eyebrow-dot"></span>
+
+            EXPLAINABLE AI SECURITY PLATFORM
+
+        </div>
+
+
+        <h1>
+
+            Intelligent
+
+            <span>
+                Cyber Risk
+            </span>
+
+            Intelligence
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            SentinelXAI combines machine learning,
+            ensemble threat detection and explainable AI
+            to analyze network activity, estimate security
+            risk and expose the factors behind every model
+            decision.
+
+        </p>
+
+
+        <div class="actions">
+
+            <a
+                href="{{ url_for('analyze') }}"
+                class="primary-btn"
+            >
+                Start Security Analysis
+                →
+            </a>
+
+
+            <a
+                href="{{ url_for('monitoring') }}"
+                class="secondary-btn"
+            >
+                Open Security Monitoring
+            </a>
+
+        </div>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-number">
+                    01
+                </div>
+
+                <div class="feature-title">
+                    Ensemble ML
+                </div>
+
+                <div class="feature-text">
+                    Multi-model threat assessment
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-number">
+                    02
+                </div>
+
+                <div class="feature-title">
+                    Risk Intelligence
+                </div>
+
+                <div class="feature-text">
+                    Quantified security risk scoring
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-number">
+                    03
+                </div>
+
+                <div class="feature-title">
+                    Explainable AI
+                </div>
+
+                <div class="feature-text">
+                    SHAP-based model interpretation
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SECURITY VISUAL -->
+
+    <div class="visual">
+
+
+        <div class="radar">
+
+            <div class="cross-x"></div>
+            <div class="cross-y"></div>
+
+            <div class="radar-scan"></div>
+
+
+            <div class="radar-center">
+
+                <strong>
+                    SENTINELXAI
+                </strong>
+
+                <span>
+                    SECURITY ENGINE
+                </span>
+
+            </div>
+
+
+            <div class="radar-event event-1">
+
+                <span class="event-dot"></span>
+
+                THREAT DETECTED
+
+            </div>
+
+
+            <div class="radar-event event-2">
+
+                <span class="event-dot green"></span>
+
+                NORMAL ACTIVITY
+
+            </div>
+
+
+            <div class="radar-event event-3">
+
+                <span class="event-dot yellow"></span>
+
+                ANALYSIS ACTIVE
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- PLATFORM ARCHITECTURE -->
+
+<section class="platform">
+
+
+    <div class="section-heading">
+
+        <div class="section-label">
+            SECURITY PIPELINE
+        </div>
+
+        <h2>
+            From Network Activity to Explainable Risk
+        </h2>
+
+        <p>
+            SentinelXAI processes security activity through
+            a multi-stage machine-learning pipeline.
+        </p>
+
+    </div>
+
+
+    <div class="architecture">
+
+
+        <div class="architecture-card">
+
+            <div class="architecture-number">
+                01
+            </div>
+
+            <div class="architecture-title">
+                Network Activity
+            </div>
+
+            <div class="architecture-text">
+                Security event and traffic characteristics
+            </div>
+
+        </div>
+
+
+        <div class="architecture-card">
+
+            <div class="architecture-number">
+                02
+            </div>
+
+            <div class="architecture-title">
+                Preprocessing
+            </div>
+
+            <div class="architecture-text">
+                Feature preparation and transformation
+            </div>
+
+        </div>
+
+
+        <div class="architecture-card">
+
+            <div class="architecture-number">
+                03
+            </div>
+
+            <div class="architecture-title">
+                Three ML Models
+            </div>
+
+            <div class="architecture-text">
+                Random Forest, XGBoost and Logistic Regression
+            </div>
+
+        </div>
+
+
+        <div class="architecture-card">
+
+            <div class="architecture-number">
+                04
+            </div>
+
+            <div class="architecture-title">
+                Ensemble Risk
+            </div>
+
+            <div class="architecture-text">
+                Weighted security risk assessment
+            </div>
+
+        </div>
+
+
+        <div class="architecture-card">
+
+            <div class="architecture-number">
+                05
+            </div>
+
+            <div class="architecture-title">
+                XAI Investigation
+            </div>
+
+            <div class="architecture-text">
+                SHAP-based explanation and analyst review
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <span>
+        SentinelXAI · Cyber Risk Intelligence Platform
+    </span>
+
+    <span>
+        Ensemble ML · Risk Scoring · Explainable AI
+    </span>
+
+</footer>
+
+
+</body>
+
+</html>

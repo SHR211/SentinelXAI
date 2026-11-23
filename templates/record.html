@@ -1,0 +1,2288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event {{ record_number }} | SentinelXAI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+  --bg:#060e1a;
+  --sidebar:#091727;
+  --panel:#0d1d30;
+  --inner:#0a192b;
+  --border:#20374d;
+  --cyan:#27d6f4;
+  --green:#31d6a0;
+  --red:#ff647b;
+  --yellow:#f5c451;
+  --orange:#ffa65e;
+  --purple:#a88bff;
+  --text:#eef7ff;
+  --muted:#8faac1;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+[hidden]{display:none!important}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible{
+  outline:2px solid var(--cyan);
+  outline-offset:3px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:258px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:100;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  transition:transform .25s;
+}
+
+.brand{
+  padding:25px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+}
+
+.brand-icon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  color:var(--cyan);
+  font-size:24px;
+  border:1px solid #28627a;
+  background:#103448;
+  border-radius:11px;
+}
+
+.brand-name{font-size:21px;font-weight:800}
+.brand-name span{color:var(--cyan)}
+
+.brand-sub{
+  font-size:9px;
+  letter-spacing:1.5px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.menu-label{
+  padding:25px 21px 10px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  color:#668aa5;
+}
+
+.menu{
+  padding:0 12px;
+  display:grid;
+  gap:5px;
+}
+
+.nav-btn,.nav-link{
+  width:100%;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#a8bdd0;
+  text-align:left;
+  font-size:12px;
+  font-weight:600;
+  transition:.2s;
+}
+
+.nav-btn i,.nav-link i{
+  width:20px;
+  font-size:18px;
+}
+
+.nav-btn:hover,.nav-link:hover{
+  background:#132d43;
+  color:#fff;
+}
+
+.nav-btn.active{
+  background:linear-gradient(90deg,#123e54,#102b41);
+  color:var(--cyan);
+  border-color:#29657c;
+  box-shadow:inset 3px 0 var(--cyan);
+}
+
+.menu-divider{
+  height:1px;
+  background:var(--border);
+  margin:20px 16px 0;
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:18px;
+  border-top:1px solid var(--border);
+}
+
+.status-box{
+  background:#0c2b34;
+  border:1px solid #245c56;
+  border-radius:11px;
+  padding:15px;
+}
+
+.status-box strong{
+  color:var(--green);
+  font-size:11px;
+}
+
+.status-box p{
+  font-size:10px;
+  color:#9ab8c6;
+  line-height:1.8;
+}
+
+/* MAIN LAYOUT */
+
+.main{
+  margin-left:258px;
+  min-width:0;
+}
+
+.topbar{
+  min-height:74px;
+  position:sticky;
+  top:0;
+  z-index:40;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:14px 32px;
+  background:rgba(9,23,39,.96);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(15px);
+}
+
+.top-left,.top-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.breadcrumb{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.breadcrumb strong{color:var(--cyan)}
+.top-link{font-size:11px;color:#b5cce0}
+
+.event-pill{
+  padding:10px 13px;
+  border-radius:9px;
+  border:1px solid #2a637d;
+  background:#103448;
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:800;
+}
+
+.mobile-btn{
+  display:none;
+  background:#123448;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px;
+}
+
+.overlay{display:none}
+
+.content{
+  max-width:1650px;
+  margin:auto;
+  padding:32px;
+}
+
+.heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:26px;
+}
+
+.eyebrow{
+  font-size:10px;
+  letter-spacing:1.5px;
+  color:var(--green);
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+h1{
+  font-size:clamp(23px,2.5vw,31px);
+  letter-spacing:-.8px;
+  margin:0 0 10px;
+}
+
+.subtitle,.description{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+.chip{
+  padding:11px 13px;
+  background:#0e2738;
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:11px;
+  color:#b4ccdc;
+}
+
+/* PDF BUTTON */
+
+.report-top-btn,
+.report-download-btn{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#27d6f4,#0789bb);
+  color:#041622;
+  font-weight:800;
+  transition:.2s;
+  border:1px solid #52e5ff;
+  box-shadow:0 6px 22px rgba(39,214,244,.12);
+}
+
+.report-top-btn{
+  padding:11px 15px;
+  font-size:11px;
+}
+
+.report-download-btn{
+  padding:15px 23px;
+  font-size:12px;
+}
+
+.report-top-btn:hover,
+.report-download-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 9px 25px rgba(39,214,244,.25);
+}
+
+/* TABS & PANELS */
+
+.tab{display:none}
+
+.tab.active{
+  display:block;
+  animation:appear .25s ease;
+}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.panel{
+  margin-bottom:20px;
+  background:linear-gradient(150deg,#0e2034,#0b1b2d);
+  border:1px solid var(--border);
+  border-radius:15px;
+  overflow:hidden;
+}
+
+.panel-header{
+  padding:20px 23px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.panel-title{
+  font-size:13px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.panel-title i{
+  color:var(--cyan);
+  font-size:17px;
+}
+
+.panel-meta{
+  font-size:10px;
+  color:var(--muted);
+}
+
+.panel-body{padding:23px}
+
+.metric-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+  margin-bottom:20px;
+}
+
+.metric{
+  min-width:0;
+  padding:20px;
+  border-radius:13px;
+  border:1px solid var(--border);
+  background:linear-gradient(145deg,#10263b,#0b1b2d);
+}
+
+.metric-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.label{
+  font-size:10px;
+  color:#91b0c6;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.metric-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  background:#12394a;
+  color:var(--cyan);
+  border-radius:9px;
+  font-size:17px;
+}
+
+.metric-value{
+  font-size:clamp(18px,2vw,27px);
+  font-weight:800;
+  margin-top:15px;
+  overflow-wrap:anywhere;
+}
+
+.metric-note{
+  font-size:10px;
+  color:#7292a9;
+  margin-top:9px;
+}
+
+.cyan{color:var(--cyan)}
+.green{color:var(--green)}
+.red{color:var(--red)}
+
+.sev-low{color:var(--green)}
+.sev-medium{color:var(--yellow)}
+.sev-high{color:var(--orange)}
+.sev-critical{color:var(--red)}
+
+.overview-grid{
+  display:grid;
+  grid-template-columns:minmax(290px,360px) minmax(0,1fr);
+  gap:20px;
+}
+
+.gauge-area{
+  text-align:center;
+  padding:29px 18px 24px;
+}
+
+.gauge{
+  position:relative;
+  width:min(100%,290px);
+  margin:auto;
+}
+
+.gauge svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.gauge-track,.gauge-progress{
+  fill:none;
+  stroke-width:18;
+  stroke-linecap:round;
+}
+
+.gauge-track{stroke:#23394c}
+
+.gauge-progress{
+  stroke:var(--cyan);
+  stroke-dasharray:0 100;
+  transition:stroke-dasharray 1.2s;
+}
+
+.gauge-score{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:14%;
+  font-size:35px;
+  font-weight:800;
+}
+
+.gauge-score small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1px;
+  margin-top:5px;
+}
+
+.risk-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 13px;
+  margin-top:7px;
+  border:1px solid var(--border);
+  border-radius:25px;
+  background:var(--inner);
+  font-size:12px;
+  font-weight:800;
+}
+
+.gauge-caption{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.8;
+  max-width:245px;
+  margin:15px auto 0;
+}
+
+.assessment{padding:26px}
+.assessment h2{font-size:24px;margin:0 0 13px}
+
+.assessment-list{
+  margin-top:22px;
+  background:var(--inner);
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:8px 18px;
+}
+
+.assessment-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+  padding:15px 0;
+  border-bottom:1px solid var(--border);
+  font-size:11px;
+}
+
+.assessment-row:last-child{border-bottom:0}
+.assessment-row span{color:var(--muted)}
+
+.assessment-row strong{
+  text-align:right;
+  overflow-wrap:anywhere;
+  max-width:65%;
+}
+
+.chart-box{
+  height:340px;
+  position:relative;
+  width:100%;
+}
+
+.chart-box.tall{height:430px}
+
+.chart-grid,.two-col{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+}
+
+.notice{
+  margin-top:17px;
+  padding:15px 17px;
+  border:1px solid #2b5369;
+  background:#0d2a3b;
+  border-radius:10px;
+  color:#aac6d8;
+  font-size:11px;
+  line-height:1.9;
+}
+
+.notice.warn{
+  color:var(--yellow);
+  border-color:#75612d;
+}
+
+.notice.good{
+  color:var(--green);
+  border-color:#28644f;
+}
+
+/* MODEL COMPARISON */
+
+.model-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.model-card{
+  padding:20px;
+  background:var(--inner);
+  border:1px solid var(--border);
+  border-radius:11px;
+}
+
+.model-name{
+  font-size:11px;
+  color:var(--cyan);
+  font-weight:800;
+}
+
+.model-prob{
+  font-size:29px;
+  font-weight:800;
+  margin:15px 0 9px;
+}
+
+.model-weight{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.progress{
+  height:9px;
+  background:#1b3044;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:17px;
+}
+
+.progress-fill{
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,#238db8,var(--cyan));
+}
+
+.ensemble{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-top:18px;
+  padding:20px;
+  background:linear-gradient(90deg,#103448,#10253b);
+  border:1px solid #2a637d;
+  border-radius:11px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.ensemble strong{
+  font-size:27px;
+  color:var(--cyan);
+}
+
+/* FORENSICS & TABLES */
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.detail-card{
+  min-width:0;
+  padding:19px;
+  background:var(--inner);
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.detail-card strong{
+  display:block;
+  margin-top:11px;
+  font-size:15px;
+  overflow-wrap:anywhere;
+}
+
+.table-wrap{
+  overflow-x:auto;
+  width:100%;
+}
+
+.data-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
+
+.data-table th,
+.data-table td{
+  padding:13px 15px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+
+.data-table th{
+  color:var(--cyan);
+  background:#0b2234;
+}
+
+.data-table td{color:#bdd0de}
+.data-table tbody tr:hover{background:rgba(39,214,244,.045)}
+
+.search-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.search-input{
+  width:min(100%,380px);
+  padding:13px 15px;
+  background:#071827;
+  color:var(--text);
+  border:1px solid #2b5369;
+  border-radius:9px;
+  font-size:12px;
+}
+
+.search-input::placeholder{color:#688ba3}
+
+.search-count{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.empty-search{
+  padding:22px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* SHAP */
+
+.shap-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.shap-card{
+  padding:19px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:var(--inner);
+}
+
+.shap-rank{
+  color:var(--cyan);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.7px;
+}
+
+.shap-feature{
+  font-size:17px;
+  font-weight:800;
+  margin:12px 0;
+  overflow-wrap:anywhere;
+}
+
+.shap-value{
+  font-size:19px;
+  font-weight:800;
+}
+
+.shap-explain{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.8;
+  margin-top:10px;
+}
+
+/* ANALYST DECISION */
+
+.decision-form{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.decision-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:14px 17px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:800;
+  transition:transform .2s;
+}
+
+.decision-btn:hover{transform:translateY(-2px)}
+
+.confirm{
+  background:#2a1c2b;
+  color:#ff9dad;
+  border:1px solid #8b3b4b;
+}
+
+.normal-btn{
+  background:#102c2c;
+  color:var(--green);
+  border:1px solid #287056;
+}
+
+.review-btn{
+  background:#29281e;
+  color:var(--yellow);
+  border:1px solid #74632d;
+}
+
+.report-panel{
+  background:linear-gradient(135deg,#103448,#0a2034);
+  border:1px solid #2c728c;
+  border-radius:12px;
+  padding:23px;
+  margin-top:20px;
+}
+
+.report-panel h3{
+  font-size:16px;
+  margin:0 0 10px;
+}
+
+.report-panel p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.9;
+  margin-bottom:20px;
+}
+
+.footer{
+  text-align:center;
+  color:#7596ac;
+  font-size:10px;
+  line-height:2;
+  padding:20px 10px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1250px){
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:1050px){
+  .overview-grid,.chart-grid,.two-col{grid-template-columns:1fr}
+}
+
+@media(max-width:850px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .mobile-btn{display:inline-flex}
+  .overlay.open{
+    display:block;
+    position:fixed;
+    inset:0;
+    z-index:90;
+    background:rgba(0,0,0,.6);
+  }
+  .content{padding:22px}
+  .topbar{padding:14px 20px}
+  .model-grid,.shap-grid{grid-template-columns:1fr}
+  .report-top-btn{font-size:0;gap:0}
+  .report-top-btn i{font-size:18px}
+}
+
+@media(max-width:560px){
+  .metric-grid,.detail-grid{grid-template-columns:1fr}
+  .content{padding:16px}
+  .panel-body,.assessment{padding:17px}
+  .chart-box{height:300px}
+  .chart-box.tall{height:380px}
+  .top-link{display:none}
+  .event-pill{padding:8px;font-size:10px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-icon">
+      <i class="icon icon-shield-check"></i>
+    </div>
+    <div>
+      <div class="brand-name">Sentinel<span>XAI</span></div>
+      <div class="brand-sub">SECURITY OPERATIONS</div>
+    </div>
+  </div>
+
+  <div class="menu-label">INVESTIGATION</div>
+
+  <nav class="menu">
+    <button class="nav-btn active" onclick="openTab('overview',this)">
+      <i class="icon icon-layout-dashboard"></i> Overview
+    </button>
+
+    <button class="nav-btn" onclick="openTab('models',this)">
+      <i class="icon icon-chart-no-axes-combined"></i> ML Comparison
+    </button>
+
+    <button class="nav-btn" onclick="openTab('shap',this)">
+      <i class="icon icon-brain-circuit"></i> SHAP Explanation
+    </button>
+
+    <button class="nav-btn" onclick="openTab('network',this)">
+      <i class="icon icon-network"></i> Network Forensics
+    </button>
+
+    <button class="nav-btn" onclick="openTab('decision',this)">
+      <i class="icon icon-shield-alert"></i> Analyst Decision
+    </button>
+  </nav>
+
+  <div class="menu-divider"></div>
+  <div class="menu-label">NAVIGATION</div>
+
+  <nav class="menu">
+    <a class="nav-link" href="{{ url_for('monitoring') }}">
+      <i class="icon icon-monitor-dot"></i> SOC Dashboard
+    </a>
+
+    <a class="nav-link" href="{{ url_for('analyze') }}">
+      <i class="icon icon-file-plus"></i> New Analysis
+    </a>
+
+    <a class="nav-link" href="{{ url_for('home') }}">
+      <i class="icon icon-house"></i> Home
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="status-box">
+      <strong>● Analysis Available</strong>
+      <p>
+        Viewing a processed dataset event.
+        Offline batch analysis; not live network monitoring.
+      </p>
+    </div>
+  </div>
+
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="mobile-btn" onclick="toggleSidebar()" aria-label="Open menu">
+        <i class="icon icon-menu"></i>
+      </button>
+
+      <div class="breadcrumb">
+        Security Operations /
+        <strong>Event Investigation</strong>
+      </div>
+    </div>
+
+    <div class="top-right">
+
+      <a class="top-link" href="{{ url_for('monitoring') }}">
+        ← Dashboard
+      </a>
+
+      <!-- NEW PDF BUTTON -->
+      <a
+        class="report-top-btn"
+        href="{{ url_for('download_security_report', record_number=record_number) }}"
+        title="Download Security Analysis PDF"
+      >
+        <i class="icon icon-file-down"></i>
+        Download PDF
+      </a>
+
+      <span class="event-pill">
+        EVENT #{{ record_number }}
+      </span>
+
+    </div>
+  </header>
+
+  <main class="content">
+
+    <div class="heading">
+      <div>
+        <div class="eyebrow">
+          ✣ EXPLAINABLE AI / EVENT ANALYSIS
+        </div>
+
+        <h1>Security Event Investigation</h1>
+
+        <div class="subtitle">
+          Intelligent risk scoring, model comparison,
+          SHAP explanations and network traffic investigation.
+        </div>
+      </div>
+
+      <div class="chip">
+        <i class="icon icon-database"></i>
+        Processed Dataset Event
+      </div>
+    </div>
+
+    <!-- ===================== OVERVIEW ===================== -->
+
+    <section id="overview" class="tab active">
+
+      <div class="metric-grid">
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="label">Risk Score</span>
+            <span class="metric-icon">
+              <i class="icon icon-gauge"></i>
+            </span>
+          </div>
+
+          <div class="metric-value cyan">
+            {{ "%.2f"|format(risk.risk_score) }}%
+          </div>
+
+          <div class="metric-note">Weighted ensemble</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="label">AI Prediction</span>
+            <span class="metric-icon">
+              <i class="icon icon-shield-alert"></i>
+            </span>
+          </div>
+
+          <div class="metric-value {% if risk.status == 'ATTACK' %}red{% else %}green{% endif %}">
+            {{ risk.status }}
+          </div>
+
+          <div class="metric-note">
+            Network event classification
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="label">Severity</span>
+            <span class="metric-icon">
+              <i class="icon icon-alert-triangle"></i>
+            </span>
+          </div>
+
+          <div class="metric-value sev-{{ risk.severity|lower }}">
+            {{ risk.severity }}
+          </div>
+
+          <div class="metric-note">
+            Risk-based severity level
+          </div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-top">
+            <span class="label">Event ID</span>
+            <span class="metric-icon">
+              <i class="icon icon-fingerprint"></i>
+            </span>
+          </div>
+
+          <div class="metric-value cyan">
+            #{{ record_number }}
+          </div>
+
+          <div class="metric-note">
+            Selected dataset record
+          </div>
+        </div>
+
+      </div>
+
+      <div class="overview-grid">
+
+        <div class="panel">
+
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-gauge"></i>
+              Ensemble Risk Score
+            </span>
+            <span class="panel-meta">0–100%</span>
+          </div>
+
+          <div class="gauge-area">
+
+            <div class="gauge">
+              <svg viewBox="0 0 300 190" role="img" aria-label="Risk score">
+                <path
+                  class="gauge-track"
+                  d="M35 150 A115 115 0 0 1 265 150"
+                  pathLength="100"
+                />
+
+                <path
+                  id="gaugeProgress"
+                  class="gauge-progress"
+                  d="M35 150 A115 115 0 0 1 265 150"
+                  pathLength="100"
+                />
+              </svg>
+
+              <div class="gauge-score">
+                {{ "%.1f"|format(risk.risk_score) }}%
+                <small>RISK SCORE</small>
+              </div>
+            </div>
+
+            <div class="risk-pill sev-{{ risk.severity|lower }}">
+              <i class="icon icon-shield-alert"></i>
+              {{ risk.severity }} Risk
+            </div>
+
+            <p class="gauge-caption">
+              Calculated using Random Forest, XGBoost
+              and Logistic Regression weighted predictions.
+            </p>
+
+          </div>
+        </div>
+
+        <div class="panel">
+
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-shield-check"></i>
+              Security Assessment
+            </span>
+            <span class="panel-meta">AI classification</span>
+          </div>
+
+          <div class="assessment">
+
+            {% if risk.status == "ATTACK" %}
+
+            <h2 class="red">
+              <i class="icon icon-shield-alert"></i>
+              ATTACK DETECTED
+            </h2>
+
+            <p class="description">
+              The weighted ML ensemble classified this event
+              as attack-related. Review model predictions,
+              SHAP explanations and network attributes
+              before confirming an incident.
+            </p>
+
+            {% else %}
+
+            <h2 class="green">
+              <i class="icon icon-shield-check"></i>
+              NORMAL ACTIVITY
+            </h2>
+
+            <p class="description">
+              The weighted ML ensemble classified this event
+              as normal. This prediction is not a guarantee
+              that the activity is harmless.
+            </p>
+
+            {% endif %}
+
+            <div class="assessment-list">
+
+              <div class="assessment-row">
+                <span>Threat Profile</span>
+                <strong>{{ threat_profile }}</strong>
+              </div>
+
+              <div class="assessment-row">
+                <span>Dataset Label</span>
+                <strong>{{ dataset_label }}</strong>
+              </div>
+
+              <div class="assessment-row">
+                <span>Model Comparison</span>
+                <strong>{{ comparison }}</strong>
+              </div>
+
+              <div class="assessment-row">
+                <span>Recommended Action</span>
+                <strong>{{ recommendation_title }}</strong>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-chart-no-axes-combined"></i>
+            ML Probability Overview
+          </span>
+          <span class="panel-meta">Event-level model estimates</span>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="chart-box">
+            <canvas id="overviewChart"></canvas>
+          </div>
+
+          <div class="notice">
+            These points show model-related probability estimates
+            for one event. The horizontal axis represents models,
+            not time.
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================== ML COMPARISON ===================== -->
+
+    <section id="models" class="tab" hidden>
+
+      <div class="panel">
+
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-cpu"></i>
+            Machine Learning Model Comparison
+          </span>
+          <span class="panel-meta">Backend prediction values</span>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="model-grid">
+
+            <div class="model-card">
+              <div class="model-name">RANDOM FOREST</div>
+
+              <div class="model-prob">
+                {{ "%.2f"|format(risk.rf_probability) }}%
+              </div>
+
+              <div class="model-weight">
+                Ensemble weight: 40%
+              </div>
+
+              <div class="progress">
+                <div class="progress-fill"
+                     style="width:{{ risk.rf_probability }}%">
+                </div>
+              </div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-name">XGBOOST</div>
+
+              <div class="model-prob">
+                {{ "%.2f"|format(risk.xgb_probability) }}%
+              </div>
+
+              <div class="model-weight">
+                Ensemble weight: 40%
+              </div>
+
+              <div class="progress">
+                <div class="progress-fill"
+                     style="width:{{ risk.xgb_probability }}%">
+                </div>
+              </div>
+            </div>
+
+            <div class="model-card">
+              <div class="model-name">LOGISTIC REGRESSION</div>
+
+              <div class="model-prob">
+                {{ "%.2f"|format(risk.lr_probability) }}%
+              </div>
+
+              <div class="model-weight">
+                Ensemble weight: 20%
+              </div>
+
+              <div class="progress">
+                <div class="progress-fill"
+                     style="width:{{ risk.lr_probability }}%">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="ensemble">
+            <span>FINAL WEIGHTED ENSEMBLE RISK</span>
+
+            <strong>
+              {{ "%.2f"|format(risk.risk_score) }}%
+            </strong>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="chart-grid">
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-chart-column"></i>
+              Probability Bar Graph
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div class="chart-box">
+              <canvas id="mlBar"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-chart-line"></i>
+              Probability Line Graph
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div class="chart-box">
+              <canvas id="mlLine"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="notice">
+        These are attack probability estimates, not model
+        accuracy scores or historical trends.
+      </div>
+
+    </section>
+
+    <!-- ===================== SHAP ===================== -->
+
+    <section id="shap" class="tab" hidden>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-brain-circuit"></i>
+            Explainable AI — SHAP Analysis
+          </span>
+
+          <span class="panel-meta">
+            Random Forest component
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <p class="description">
+            SHAP values describe how input features contribute
+            to the Random Forest component's output for this event.
+            They do not directly explain the full weighted ensemble.
+          </p>
+
+          {% if not shap_explanation %}
+          <div class="notice">
+            SHAP values are not available for this event.
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+      {% if shap_explanation %}
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-sparkles"></i>
+            Top SHAP Features Interpretation
+          </span>
+          <span class="panel-meta">
+            Highest absolute contributions
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="shap-grid" id="shapInterpretation"></div>
+
+          <div class="notice">
+            Feature ranking is based on absolute SHAP magnitude.
+            Positive and negative signs describe contribution
+            direction for the explained Random Forest output;
+            they do not independently establish causality.
+          </div>
+
+        </div>
+      </div>
+
+      <div class="chart-grid">
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-chart-column"></i>
+              SHAP Feature Contributions
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div class="chart-box tall">
+              <canvas id="shapBar"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">
+              <i class="icon icon-chart-line"></i>
+              SHAP Contribution Profile
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div class="chart-box tall">
+              <canvas id="shapLine"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-list"></i>
+            Feature Contribution Details
+          </span>
+        </div>
+
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>SHAP Value</th>
+                  <th>Direction</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for item in shap_explanation %}
+                <tr>
+                  <td>{{ item.feature }}</td>
+
+                  <td>
+                    {{ "%+.6f"|format(item.value) }}
+                  </td>
+
+                  <td class="{% if item.value >= 0 %}green{% else %}red{% endif %}">
+                    {% if item.value >= 0 %}
+                      Positive
+                    {% else %}
+                      Negative
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {% endif %}
+
+    </section>
+
+    <!-- ===================== NETWORK FORENSICS ===================== -->
+
+    <section id="network" class="tab" hidden>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-network"></i>
+            Network Traffic Forensics
+          </span>
+
+          <span class="panel-meta">
+            Original dataset attributes
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <p class="description">
+            Inspect network attributes associated with this
+            processed CSV event.
+          </p>
+
+          <div class="detail-grid">
+
+            <div class="detail-card">
+              <span class="label">Protocol</span>
+              <strong class="cyan">
+                {{ protocol_info.protocol }}
+              </strong>
+            </div>
+
+            <div class="detail-card">
+              <span class="label">Service</span>
+              <strong>
+                {{ protocol_info.service }}
+              </strong>
+            </div>
+
+            <div class="detail-card">
+              <span class="label">Connection State</span>
+              <strong>
+                {{ protocol_info.state }}
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-activity"></i>
+            Network Inspection
+          </span>
+
+          <span class="panel-meta">
+            Observed traffic fields
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Network Attribute</th>
+                  <th>Dataset Field</th>
+                  <th>Observed Value</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for item in network_inspection %}
+
+                {% if item.field not in ['proto','service','state'] %}
+                <tr>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.field }}</td>
+                  <td>{{ item.value }}</td>
+                </tr>
+                {% endif %}
+
+                {% else %}
+                <tr>
+                  <td colspan="3">
+                    No network inspection data available.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-chart-column"></i>
+            Network Feature Metrics
+          </span>
+        </div>
+
+        <div class="panel-body">
+          <div class="chart-box tall">
+            <canvas id="networkChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-database"></i>
+            Raw Event Data
+          </span>
+
+          <span class="panel-meta">
+            Dataset record values
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="search-row">
+            <input
+              id="rawSearch"
+              class="search-input"
+              type="search"
+              placeholder="Search field or value..."
+              oninput="filterRawData()"
+            >
+
+            <span class="search-count" id="rawCount"></span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table" id="rawTable">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for item in raw_event_data %}
+                <tr>
+                  <td>{{ item.field }}</td>
+                  <td>{{ item.value }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="empty-search" id="rawEmpty" hidden>
+            No matching fields found.
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================== ANALYST DECISION ===================== -->
+
+    <section id="decision" class="tab" hidden>
+
+      <div class="panel">
+
+        <div class="panel-header">
+          <span class="panel-title">
+            <i class="icon icon-shield-alert"></i>
+            Analyst Review & Decision
+          </span>
+
+          <span class="panel-meta">
+            Human-in-the-loop assessment
+          </span>
+        </div>
+
+        <div class="panel-body">
+
+          <p class="description">
+            Review the AI prediction, model probabilities,
+            SHAP contributions and network evidence before
+            recording your assessment.
+          </p>
+
+          <div class="assessment-list">
+
+            <div class="assessment-row">
+              <span>AI Prediction</span>
+              <strong>{{ risk.status }}</strong>
+            </div>
+
+            <div class="assessment-row">
+              <span>Risk Score</span>
+              <strong>
+                {{ "%.2f"|format(risk.risk_score) }}%
+              </strong>
+            </div>
+
+            <div class="assessment-row">
+              <span>Severity</span>
+              <strong>{{ risk.severity }}</strong>
+            </div>
+
+            <div class="assessment-row">
+              <span>Dataset Label</span>
+              <strong>{{ dataset_label }}</strong>
+            </div>
+
+            <div class="assessment-row">
+              <span>Comparison</span>
+              <strong>{{ comparison }}</strong>
+            </div>
+
+            <div class="assessment-row">
+              <span>Current Analyst Decision</span>
+              <strong class="cyan">
+                {{ analyst_decision }}
+              </strong>
+            </div>
+
+          </div>
+
+          {% if comparison == "DISAGREEMENT" %}
+          <div class="notice warn">
+            <i class="icon icon-alert-triangle"></i>
+            AI prediction and dataset reference label disagree.
+            Manual investigation is recommended.
+          </div>
+          {% endif %}
+
+          <div class="notice">
+            <strong>{{ recommendation_title }}</strong>
+            <p>{{ recommendation_text }}</p>
+          </div>
+
+          <form
+            class="decision-form"
+            method="POST"
+            action="{{ url_for('analyst_decision', record_number=record_number) }}"
+          >
+
+            <button
+              class="decision-btn confirm"
+              type="submit"
+              name="decision"
+              value="Confirmed Attack"
+            >
+              <i class="icon icon-shield-alert"></i>
+              Confirmed Attack
+            </button>
+
+            <button
+              class="decision-btn normal-btn"
+              type="submit"
+              name="decision"
+              value="Marked as Normal"
+            >
+              <i class="icon icon-shield-check"></i>
+              Marked as Normal
+            </button>
+
+            <button
+              class="decision-btn review-btn"
+              type="submit"
+              name="decision"
+              value="Needs Review"
+            >
+              <i class="icon icon-clock"></i>
+              Needs Review
+            </button>
+
+          </form>
+
+          <!-- NEW PROFESSIONAL REPORT FEATURE -->
+
+          <div class="report-panel">
+
+            <h3>
+              <i class="icon icon-file-text cyan"></i>
+              Professional Security Analysis Report
+            </h3>
+
+            <p>
+              Generate a downloadable PDF report containing the
+              selected event's actual AI prediction, ensemble
+              risk score, individual ML probabilities,
+              Random Forest SHAP explanations, network
+              forensics, security recommendations and
+              recorded analyst decision.
+            </p>
+
+            <a
+              class="report-download-btn"
+              href="{{ url_for('download_security_report', record_number=record_number) }}"
+            >
+              <i class="icon icon-file-down"></i>
+              Download Security Analysis PDF
+            </a>
+
+            <div class="notice">
+              Report data is generated from the processed
+              CSV analysis and current analyst review.
+              This is an offline security assessment.
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      SentinelXAI — Explainable AI for Intelligent Cyber Risk Assessment
+      <div>
+        Security Operations Dashboard | Offline Dataset Analysis
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+
+<script>
+
+/* TAB NAVIGATION */
+
+function openTab(tabId,button){
+
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+    tab.hidden=true;
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  const target=document.getElementById(tabId);
+
+  if(target){
+    target.hidden=false;
+    target.classList.add("active");
+  }
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  closeSidebar();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+/* MOBILE SIDEBAR */
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+  document.getElementById("overlay").classList.toggle("open");
+}
+
+function closeSidebar(){
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("overlay").classList.remove("open");
+}
+
+/* BACKEND VALUES */
+
+const riskScore={{ risk.risk_score|tojson }};
+
+const rfProbability={{ risk.rf_probability|tojson }};
+const xgbProbability={{ risk.xgb_probability|tojson }};
+const lrProbability={{ risk.lr_probability|tojson }};
+
+const shapData={{ shap_explanation|tojson }};
+const networkData={{ feature_metrics|tojson }};
+
+const CYAN="#27d6f4";
+const GREEN="#31d6a0";
+const RED="#ff647b";
+const PURPLE="#a88bff";
+const BLUE="#518dff";
+
+/* RISK GAUGE */
+
+const gauge=document.getElementById("gaugeProgress");
+
+if(gauge){
+  const score=Math.max(0,Math.min(100,Number(riskScore)||0));
+
+  gauge.style.strokeDasharray=score+" 100";
+
+  if(score>=80){
+    gauge.style.stroke=RED;
+  }else if(score>=60){
+    gauge.style.stroke="#ffa65e";
+  }else if(score>=30){
+    gauge.style.stroke="#f5c451";
+  }else{
+    gauge.style.stroke=GREEN;
+  }
+}
+
+/* CHART DEFAULTS */
+
+if(typeof Chart!=="undefined"){
+
+  Chart.defaults.color="#a9c3d5";
+  Chart.defaults.borderColor="rgba(130,170,195,.13)";
+  Chart.defaults.font.family="Inter, Arial, sans-serif";
+
+  const modelLabels=[
+    "Random Forest",
+    "XGBoost",
+    "Logistic Regression",
+    "Weighted Ensemble"
+  ];
+
+  const modelValues=[
+    rfProbability,
+    xgbProbability,
+    lrProbability,
+    riskScore
+  ];
+
+  const commonPlugins={
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:"#102b41",
+      titleColor:"#ffffff",
+      bodyColor:"#d8eaf4",
+      borderColor:"#2a637d",
+      borderWidth:1
+    }
+  };
+
+  const percentageScale={
+    beginAtZero:true,
+    max:100,
+    ticks:{
+      callback:value=>value+"%"
+    },
+    grid:{
+      color:"rgba(130,170,195,.12)"
+    }
+  };
+
+  /* OVERVIEW LINE CHART */
+
+  const overviewCanvas=document.getElementById("overviewChart");
+
+  if(overviewCanvas){
+    new Chart(overviewCanvas,{
+      type:"line",
+      data:{
+        labels:modelLabels,
+        datasets:[{
+          label:"Attack Probability",
+          data:modelValues,
+          borderColor:CYAN,
+          backgroundColor:"rgba(39,214,244,.12)",
+          pointBackgroundColor:CYAN,
+          pointRadius:6,
+          pointHoverRadius:8,
+          tension:.3,
+          fill:true,
+          borderWidth:3
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:commonPlugins,
+        scales:{
+          y:percentageScale,
+          x:{
+            grid:{display:false}
+          }
+        }
+      }
+    });
+  }
+
+  /* ML BAR GRAPH */
+
+  const mlBar=document.getElementById("mlBar");
+
+  if(mlBar){
+    new Chart(mlBar,{
+      type:"bar",
+      data:{
+        labels:modelLabels,
+        datasets:[{
+          data:modelValues,
+          backgroundColor:[
+            CYAN,
+            BLUE,
+            PURPLE,
+            GREEN
+          ],
+          borderRadius:7
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:commonPlugins,
+        scales:{
+          y:percentageScale,
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  }
+
+  /* ML LINE GRAPH */
+
+  const mlLine=document.getElementById("mlLine");
+
+  if(mlLine){
+    new Chart(mlLine,{
+      type:"line",
+      data:{
+        labels:modelLabels,
+        datasets:[{
+          label:"Attack Probability",
+          data:modelValues,
+          borderColor:CYAN,
+          backgroundColor:"rgba(39,214,244,.1)",
+          pointBackgroundColor:CYAN,
+          pointRadius:6,
+          tension:.3,
+          fill:true,
+          borderWidth:3
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:commonPlugins,
+        scales:{
+          y:percentageScale,
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  }
+
+  /* SHAP VISUALIZATION */
+
+  if(Array.isArray(shapData)&&shapData.length){
+
+    const shapLabels=shapData.map(item=>String(item.feature));
+    const shapValues=shapData.map(item=>Number(item.value)||0);
+
+    const shapColors=shapValues.map(value=>
+      value>=0?GREEN:RED
+    );
+
+    const shapContainer=document.getElementById("shapInterpretation");
+
+    if(shapContainer){
+
+      shapData.slice(0,3).forEach((item,index)=>{
+
+        const value=Number(item.value)||0;
+
+        const card=document.createElement("div");
+        card.className="shap-card";
+
+        const rank=document.createElement("div");
+        rank.className="shap-rank";
+        rank.textContent="TOP CONTRIBUTOR "+(index+1);
+
+        const feature=document.createElement("div");
+        feature.className="shap-feature";
+        feature.textContent=String(item.feature);
+
+        const valueElement=document.createElement("div");
+        valueElement.className="shap-value "+(
+          value>=0?"green":"red"
+        );
+        valueElement.textContent=(
+          value>=0?"+":""
+        )+value.toFixed(6);
+
+        const explanation=document.createElement("div");
+        explanation.className="shap-explain";
+        explanation.textContent=
+          value>=0
+          ?"Positive contribution to the explained Random Forest output."
+          :"Negative contribution to the explained Random Forest output.";
+
+        card.appendChild(rank);
+        card.appendChild(feature);
+        card.appendChild(valueElement);
+        card.appendChild(explanation);
+
+        shapContainer.appendChild(card);
+      });
+    }
+
+    const shapBar=document.getElementById("shapBar");
+
+    if(shapBar){
+      new Chart(shapBar,{
+        type:"bar",
+        data:{
+          labels:shapLabels,
+          datasets:[{
+            data:shapValues,
+            backgroundColor:shapColors,
+            borderRadius:5
+          }]
+        },
+        options:{
+          indexAxis:"y",
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:commonPlugins,
+          scales:{
+            x:{
+              grid:{
+                color:"rgba(130,170,195,.12)"
+              }
+            },
+            y:{
+              grid:{display:false}
+            }
+          }
+        }
+      });
+    }
+
+    const shapLine=document.getElementById("shapLine");
+
+    if(shapLine){
+      new Chart(shapLine,{
+        type:"line",
+        data:{
+          labels:shapLabels,
+          datasets:[{
+            label:"SHAP Contribution",
+            data:shapValues,
+            borderColor:CYAN,
+            backgroundColor:"rgba(39,214,244,.1)",
+            pointBackgroundColor:shapColors,
+            pointRadius:5,
+            tension:.25,
+            borderWidth:3
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:commonPlugins,
+          scales:{
+            x:{
+              ticks:{
+                maxRotation:55,
+                minRotation:35
+              }
+            },
+            y:{
+              grid:{
+                color:"rgba(130,170,195,.12)"
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  /* NETWORK FEATURE METRICS */
+
+  const networkChart=document.getElementById("networkChart");
+
+  if(networkChart){
+
+    const metrics=Array.isArray(networkData)
+      ?networkData.filter(item=>
+        Number.isFinite(Number(item.value))
+      ).slice(0,15)
+      :[];
+
+    if(metrics.length){
+
+      new Chart(networkChart,{
+        type:"bar",
+        data:{
+          labels:metrics.map(item=>String(item.feature)),
+          datasets:[{
+            label:"Observed Value",
+            data:metrics.map(item=>Number(item.value)),
+            backgroundColor:CYAN,
+            borderRadius:5
+          }]
+        },
+        options:{
+          indexAxis:"y",
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:commonPlugins,
+          scales:{
+            x:{
+              beginAtZero:true
+            },
+            y:{
+              grid:{display:false}
+            }
+          }
+        }
+      });
+
+    }else{
+
+      const context=networkChart.getContext("2d");
+
+      context.fillStyle="#8faac1";
+      context.font="13px Inter, Arial";
+      context.fillText(
+        "No numeric network metrics available.",
+        20,
+        35
+      );
+    }
+  }
+}
+
+/* RAW DATA SEARCH */
+
+function filterRawData(){
+
+  const input=document.getElementById("rawSearch");
+  const table=document.getElementById("rawTable");
+
+  if(!input||!table)return;
+
+  const query=input.value.toLowerCase().trim();
+
+  const rows=Array.from(
+    table.querySelectorAll("tbody tr")
+  );
+
+  let visible=0;
+
+  rows.forEach(row=>{
+
+    const matches=row.textContent.toLowerCase().includes(query);
+
+    row.hidden=!matches;
+
+    if(matches)visible++;
+  });
+
+  const counter=document.getElementById("rawCount");
+  const empty=document.getElementById("rawEmpty");
+
+  if(counter){
+    counter.textContent=
+      "Showing "+visible+" of "+rows.length+" fields";
+  }
+
+  if(empty){
+    empty.hidden=visible!==0;
+  }
+}
+
+filterRawData();
+
+/* RESTORE ANALYST TAB AFTER SAVING */
+
+const analystDecision={{ analyst_decision|tojson }};
+
+if(analystDecision&&analystDecision!=="Not yet selected"){
+
+  const params=new URLSearchParams(window.location.search);
+
+  if(params.get("tab")==="decision"){
+    const button=Array.from(
+      document.querySelectorAll(".nav-btn")
+    ).find(btn=>btn.textContent.includes("Analyst Decision"));
+
+    if(button){
+      openTab("decision",button);
+    }
+  }
+}
+
+</script>
+
+</body>
+</html>

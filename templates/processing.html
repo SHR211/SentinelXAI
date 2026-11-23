@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SentinelXAI | Processing</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #050b14;
+            color: #e9f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            width: 90%;
+            max-width: 650px;
+            background: #091522;
+            border: 1px solid #18364b;
+            border-radius: 15px;
+            padding: 45px;
+            text-align: center;
+        }
+
+        .logo {
+            color: #29d9ff;
+            font-size: 25px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .loader {
+            width: 70px;
+            height: 70px;
+            border: 3px solid #123043;
+            border-top-color: #29d9ff;
+            border-radius: 50%;
+            margin: auto auto 25px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7892a2;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background: #102331;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #20cbea;
+            box-shadow: 0 0 15px #20cbea;
+            animation: progress 2.2s ease forwards;
+        }
+
+        @keyframes progress {
+            0% { width: 5%; }
+            40% { width: 45%; }
+            75% { width: 75%; }
+            100% { width: 100%; }
+        }
+
+        .steps {
+            text-align: left;
+        }
+
+        .step {
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 7px;
+            background: #07121d;
+            border: 1px solid #132b3b;
+            font-size: 13px;
+            color: #a1b6c4;
+        }
+
+        .step span {
+            color: #38e59d;
+            margin-right: 10px;
+        }
+
+        .note {
+            margin-top: 25px;
+            color: #617b8c;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="logo">SentinelXAI</div>
+
+    <div class="loader"></div>
+
+    <h1>Security Analysis Complete</h1>
+
+    <p class="subtitle">
+        Preparing the security monitoring dashboard...
+    </p>
+
+    <div class="progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="steps">
+
+        <div class="step">
+            <span>✓</span>
+            Dataset ingestion completed
+        </div>
+
+        <div class="step">
+            <span>✓</span>
+            Feature preparation completed
+        </div>
+
+        <div class="step">
+            <span>✓</span>
+            Ensemble ML assessment completed
+        </div>
+
+        <div class="step">
+            <span>✓</span>
+            Risk severity calculation completed
+        </div>
+
+        <div class="step">
+            <span>✓</span>
+            Security monitoring ready
+        </div>
+
+    </div>
+
+    <div class="note">
+        Redirecting to Security Monitoring...
+    </div>
+
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ url_for('monitoring') }}";
+    }, 2500);
+</script>
+
+</body>
+</html>

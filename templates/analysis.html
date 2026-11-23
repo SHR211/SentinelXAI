@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelXAI | Security Data Analysis</title>
+
+<style>
+:root {
+    --bg: #060b13;
+    --panel: #0d1725;
+    --panel2: #101f30;
+    --border: #203247;
+    --cyan: #25d4f4;
+    --text: #edf5ff;
+    --muted: #93a7bb;
+    --green: #31d6a0;
+    --red: #ff7185;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+nav {
+    min-height: 74px;
+    padding: 15px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #08111c;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    color: var(--cyan);
+}
+
+.logo span {
+    color: white;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: var(--cyan);
+}
+
+.container {
+    max-width: 1180px;
+    margin: auto;
+    padding: 60px 25px;
+}
+
+.eyebrow {
+    color: var(--green);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: clamp(30px, 4vw, 43px);
+    margin-bottom: 14px;
+}
+
+.subtitle {
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 15px;
+    max-width: 750px;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 22px;
+    margin-top: 38px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 27px;
+}
+
+.panel-title {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.panel-subtitle {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+.drop-zone {
+    min-height: 235px;
+    border: 2px dashed #2a5068;
+    border-radius: 11px;
+    background: #091523;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+    background: #10283a;
+    border-color: var(--cyan);
+}
+
+.upload-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 12px;
+    background: #10364a;
+    border: 1px solid #23657b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 29px;
+    color: var(--cyan);
+    margin-bottom: 18px;
+}
+
+.drop-zone h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.drop-zone p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+#file {
+    display: none;
+}
+
+.file-details {
+    margin-top: 18px;
+    background: #0b1e2c;
+    border: 1px solid #25475b;
+    border-radius: 9px;
+    padding: 15px;
+    display: none;
+}
+
+.file-details strong {
+    display: block;
+    font-size: 13px;
+    color: var(--cyan);
+    overflow-wrap: anywhere;
+}
+
+.file-details small {
+    display: block;
+    margin-top: 7px;
+    color: var(--muted);
+}
+
+.error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 15px;
+    display: none;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 23px;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--cyan);
+    color: #03111b;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #6ce7ff;
+}
+
+.submit-btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.status {
+    display: none;
+    margin-top: 17px;
+    font-size: 13px;
+    color: var(--green);
+}
+
+.pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pipeline-step {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    padding: 13px;
+    background: #101e2e;
+    border: 1px solid #20384c;
+    border-radius: 8px;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: #12384c;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.pipeline-step h4 {
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.pipeline-step p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.info-grid {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.info-card {
+    background: #0b1724;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.info-card h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.note {
+    margin-top: 24px;
+    padding: 16px 19px;
+    border: 1px solid #2b4458;
+    background: #0c1927;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--muted);
+}
+
+@media(max-width: 850px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 550px) {
+    nav {
+        padding: 15px 5%;
+    }
+
+    .container {
+        padding: 40px 17px;
+    }
+
+    .panel {
+        padding: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">Sentinel<span>XAI</span></div>
+    <a href="{{ url_for('home') }}">← Back to Overview</a>
+</nav>
+
+<main class="container">
+
+    <div class="eyebrow">
+        SECURITY DATA ANALYSIS
+    </div>
+
+    <h1>Network Traffic Assessment</h1>
+
+    <p class="subtitle">
+        Upload network traffic records to identify suspicious
+        activity, calculate cyber-risk scores and investigate
+        model predictions through explainable AI.
+    </p>
+
+    <div class="main-grid">
+
+        <section class="panel">
+
+            <h2 class="panel-title">
+                Upload Network Dataset
+            </h2>
+
+            <p class="panel-subtitle">
+                Select a CSV file containing UNSW-NB15-compatible
+                network traffic features.
+            </p>
+
+            <form
+                id="uploadForm"
+                action="{{ url_for('upload') }}"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="drop-zone" id="dropZone"
+                     role="button" tabindex="0"
+                     aria-label="Choose or drop CSV file">
+
+                    <div class="upload-icon">⇧</div>
+
+                    <h3>Drag & Drop CSV File</h3>
+
+                    <p>
+                        or click here to browse your device
+                    </p>
+
+                    <p style="margin-top:10px">
+                        Supported format: .csv
+                    </p>
+
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept=".csv,text/csv"
+                        required
+                    >
+
+                </div>
+
+                <div class="file-details" id="fileDetails">
+                    <strong id="fileName"></strong>
+                    <small id="fileSize"></small>
+                </div>
+
+                <div class="error" id="errorMessage"
+                     role="alert"></div>
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="submitBtn"
+                    disabled
+                >
+                    SELECT DATASET TO CONTINUE
+                </button>
+
+                <div class="status" id="statusMessage"
+                     role="status">
+                    Dataset submitted. Processing network
+                    records and generating risk assessments...
+                </div>
+
+            </form>
+
+        </section>
+
+        <aside class="panel">
+
+            <h2 class="panel-title">
+                Assessment Pipeline
+            </h2>
+
+            <p class="panel-subtitle">
+                Processing stages used by the SentinelXAI engine.
+            </p>
+
+            <div class="pipeline">
+
+                <div class="pipeline-step">
+                    <div class="step-number">01</div>
+                    <div>
+                        <h4>Data Preprocessing</h4>
+                        <p>
+                            Encode categorical features, handle
+                            missing values and align model inputs.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">02</div>
+                    <div>
+                        <h4>ML Threat Assessment</h4>
+                        <p>
+                            Generate predictions using Random
+                            Forest, XGBoost and Logistic Regression.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">03</div>
+                    <div>
+                        <h4>Weighted Risk Scoring</h4>
+                        <p>
+                            Combine model probabilities using
+                            40% RF, 40% XGBoost and 20% LR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">04</div>
+                    <div>
+                        <h4>Security Monitoring</h4>
+                        <p>
+                            Display event predictions, risk
+                            scores and severity classifications.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="step-number">05</div>
+                    <div>
+                        <h4>Explainable Investigation</h4>
+                        <p>
+                            Use SHAP to explain the Random Forest
+                            model for selected network events.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <h3>Supported Dataset</h3>
+            <p>
+                UNSW-NB15 network traffic records with
+                protocol, service, state and numerical
+                traffic features.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <h3>Threat Classification</h3>
+            <p>
+                Each event receives an ATTACK or NORMAL
+                prediction based on ensemble probability.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <h3>Risk Severity</h3>
+            <p>
+                Cyber risk is categorized as Low, Medium,
+                High or Critical for investigation priority.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="note">
+        <strong>Data Source Notice:</strong>
+        SentinelXAI performs batch analysis on uploaded CSV
+        records. It does not capture live network packets.
+        For reliable results, upload files containing the
+        same network features used during model training.
+    </div>
+
+</main>
+
+<script>
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("file");
+const form = document.getElementById("uploadForm");
+const submitBtn = document.getElementById("submitBtn");
+const fileDetails = document.getElementById("fileDetails");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+const errorMessage = document.getElementById("errorMessage");
+const statusMessage = document.getElementById("statusMessage");
+
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+}
+
+function clearError() {
+    errorMessage.textContent = "";
+    errorMessage.style.display = "none";
+}
+
+function resetSelection() {
+    fileDetails.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "SELECT DATASET TO CONTINUE";
+}
+
+function validateFile(file) {
+    clearError();
+
+    if (!file) {
+        resetSelection();
+        return false;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".csv")) {
+        showError("Only CSV files are supported.");
+        resetSelection();
+        return false;
+    }
+
+    if (file.size === 0) {
+        showError("The selected CSV file is empty.");
+        resetSelection();
+        return false;
+    }
+
+    fileName.textContent = file.name;
+    fileSize.textContent =
+        "File size: " +
+        (file.size / (1024 * 1024)).toFixed(2) +
+        " MB";
+
+    fileDetails.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "START SECURITY ANALYSIS";
+    return true;
+}
+
+dropZone.addEventListener("click", function () {
+    fileInput.click();
+});
+
+dropZone.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        fileInput.click();
+    }
+});
+
+fileInput.addEventListener("click", function (event) {
+    event.stopPropagation();
+});
+
+fileInput.addEventListener("change", function () {
+    validateFile(fileInput.files[0]);
+});
+
+dropZone.addEventListener("dragover", function (event) {
+    event.preventDefault();
+    dropZone.classList.add("dragover");
+});
+
+dropZone.addEventListener("dragleave", function () {
+    dropZone.classList.remove("dragover");
+});
+
+dropZone.addEventListener("drop", function (event) {
+    event.preventDefault();
+    dropZone.classList.remove("dragover");
+
+    const files = event.dataTransfer.files;
+
+    if (files.length > 0) {
+        fileInput.files = files;
+        validateFile(fileInput.files[0]);
+    }
+});
+
+form.addEventListener("submit", function (event) {
+    if (!validateFile(fileInput.files[0])) {
+        event.preventDefault();
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "PROCESSING DATASET...";
+    statusMessage.style.display = "block";
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+uploads/
+*.csv
+*.log
+sentinelxai_model.pkl
+sentinelxai_rf.pkl
+templates.zip
